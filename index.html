@@ -27,7 +27,13 @@
                         <p>Question Paper Builder</p>
                     </div>
                 </div>
-                <button class="toggle-btn" id="togglePanel" title="Toggle Editor">‹</button>
+                <div class="header-actions">
+                    <button class="btn-head-icon" id="resetBtn" title="Reset/Clear All">🧹</button>
+                    <button class="btn-head-icon" id="exportBtn" title="Export JSON">📤</button>
+                    <button class="btn-head-icon" id="importBtn" title="Import JSON">📥</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none" />
+                    <button class="toggle-btn" id="togglePanel" title="Toggle Editor">‹</button>
+                </div>
             </div>
 
             <div class="editor-scroll">

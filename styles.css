@@ -91,6 +91,7 @@ body {
     font-size: 1.2rem;
     font-weight: 700;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -120,6 +121,33 @@ body {
 .toggle-btn:hover {
     background: var(--accent);
     color: #fff;
+    border-color: var(--accent);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-head-icon {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-head-icon:hover {
+    background: var(--surface);
+    color: var(--accent);
     border-color: var(--accent);
 }
 
@@ -300,6 +328,14 @@ body {
     align-items: flex-start;
 }
 
+.qn-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
 .qn-number {
     background: var(--accent);
     color: #fff;
@@ -307,8 +343,33 @@ body {
     font-size: 0.7rem;
     border-radius: 5px;
     padding: 2px 7px;
-    flex-shrink: 0;
-    margin-top: 8px;
+}
+
+.qn-move-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.qn-move-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 20px;
+    height: 18px;
+    font-size: 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.qn-move-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
 }
 
 .question-fields {
@@ -610,7 +671,9 @@ body {
     text-align: center;
 }
 
-.qp-table .col-q {}
+.qp-table .col-q {
+    /* Auto-width */
+}
 
 .qp-table .col-co {
     width: 44px;

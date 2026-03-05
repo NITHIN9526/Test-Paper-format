@@ -11,8 +11,6 @@ function val(id) { return document.getElementById(id)?.value || ''; }
 //   text  - string (question text)
 //   co    - string
 //   btl   - string
-//   blocks - array of { id, type:'equation'|'figure'|'code', ...typeProps }
-
 let parts = [
   {
     id: uid(), name: 'Part A',
@@ -42,6 +40,99 @@ let parts = [
     ]
   }
 ];
+
+// ── PERSISTENCE ─────────────────────────────────────────────
+const STORAGE_KEY = 'qp_editor_data';
+
+function saveToStorage() {
+  const data = {
+    parts,
+    header: {
+      paperCode: val('paperCode'),
+      examTitle1: val('examTitle1'),
+      examTitle2: val('examTitle2'),
+      examDate: val('examDate'),
+      department: val('department'),
+      subjectName: val('subjectName'),
+      examTime: val('examTime'),
+      maxMarks: val('maxMarks'),
+      footerText: val('footerText')
+    }
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadFromStorage() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data.parts) parts = data.parts;
+      if (data.header) {
+        Object.keys(data.header).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = data.header[id];
+        });
+      }
+    } catch (e) { console.error('Load error:', e); }
+  }
+}
+
+function resetEditor() {
+  if (confirm('Are you sure you want to clear all data and reset to defaults?')) {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+}
+
+function exportData() {
+  const data = {
+    parts,
+    header: {
+      paperCode: val('paperCode'),
+      examTitle1: val('examTitle1'),
+      examTitle2: val('examTitle2'),
+      examDate: val('examDate'),
+      department: val('department'),
+      subjectName: val('subjectName'),
+      examTime: val('examTime'),
+      maxMarks: val('maxMarks'),
+      footerText: val('footerText')
+    }
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `qp-${val('paperCode') || 'export'}.json`;
+  a.click();
+  showToast('Paper exported! 📁');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (data.parts && data.header) {
+        parts = data.parts;
+        Object.keys(data.header).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = data.header[id];
+        });
+        saveToStorage();
+        renderEditor();
+        updatePreview();
+        showToast('Paper imported! 📥');
+      }
+    } catch (err) {
+      alert('Invalid JSON file.');
+    }
+  };
+  reader.readAsText(file);
+}
 
 // ── QUESTION NUMBER ─────────────────────────────────────────
 function getGlobalQuestionNumber(partIdx, qIdx) {
@@ -144,7 +235,13 @@ function renderEditor() {
       qHtml += `
         <div class="question-card" data-qid="${q.id}">
           <div class="question-row">
-            <span class="qn-number">${globalN}</span>
+            <div class="qn-side">
+              <span class="qn-number">${globalN}</span>
+              <div class="qn-move-btns">
+                <button class="qn-move-btn" data-qaction="moveup" data-pid="${part.id}" data-qid="${q.id}">↑</button>
+                <button class="qn-move-btn" data-qaction="movedown" data-pid="${part.id}" data-qid="${q.id}">↓</button>
+              </div>
+            </div>
             <div class="question-fields">
               <div class="field-group">
                 <label>Question Text</label>
@@ -215,8 +312,26 @@ function attachEditorEvents() {
       const part = parts.find(p => p.id === btn.dataset.pid);
       if (part) {
         part.questions.push({ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [] });
+        saveToStorage();
         renderEditor(); updatePreview();
       }
+    });
+  });
+
+  // Question actions (up/down)
+  document.querySelectorAll('[data-qaction]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const { qaction, pid, qid } = btn.dataset;
+      const part = parts.find(p => p.id === pid);
+      if (!part) return;
+      const idx = part.questions.findIndex(q => q.id === qid);
+      if (qaction === 'moveup' && idx > 0) {
+        [part.questions[idx - 1], part.questions[idx]] = [part.questions[idx], part.questions[idx - 1]];
+      } else if (qaction === 'movedown' && idx < part.questions.length - 1) {
+        [part.questions[idx + 1], part.questions[idx]] = [part.questions[idx], part.questions[idx + 1]];
+      }
+      saveToStorage();
+      renderEditor(); updatePreview();
     });
   });
 
@@ -226,6 +341,7 @@ function attachEditorEvents() {
       const part = parts.find(p => p.id === btn.dataset.pid);
       if (part) {
         part.questions = part.questions.filter(q => q.id !== btn.dataset.qid);
+        saveToStorage();
         renderEditor(); updatePreview();
       }
     });
@@ -237,13 +353,13 @@ function attachEditorEvents() {
       const { action, pid } = btn.dataset;
       const idx = parts.findIndex(p => p.id === pid);
       if (action === 'removepart') {
-        if (confirm('Remove this part?')) { parts.splice(idx, 1); renderEditor(); updatePreview(); }
+        if (confirm('Remove this part?')) { parts.splice(idx, 1); saveToStorage(); renderEditor(); updatePreview(); }
       } else if (action === 'moveup' && idx > 0) {
         [parts[idx - 1], parts[idx]] = [parts[idx], parts[idx - 1]];
-        renderEditor(); updatePreview();
+        saveToStorage(); renderEditor(); updatePreview();
       } else if (action === 'movedown' && idx < parts.length - 1) {
         [parts[idx + 1], parts[idx]] = [parts[idx], parts[idx + 1]];
-        renderEditor(); updatePreview();
+        saveToStorage(); renderEditor(); updatePreview();
       }
     });
   });
@@ -259,6 +375,7 @@ function attachEditorEvents() {
       if (btype === 'figure') { block.src = ''; block.caption = ''; block.width = 60; block.align = 'center'; }
       if (btype === 'code') { block.code = ''; }
       q.blocks.push(block);
+      saveToStorage();
       renderEditor(); updatePreview();
     });
   });
@@ -268,7 +385,7 @@ function attachEditorEvents() {
     btn.addEventListener('click', () => {
       const { pid, qid, bid } = btn.dataset;
       const q = getQuestion(pid, qid);
-      if (q) { q.blocks = q.blocks.filter(b => b.id !== bid); renderEditor(); updatePreview(); }
+      if (q) { q.blocks = q.blocks.filter(b => b.id !== bid); saveToStorage(); renderEditor(); updatePreview(); }
     });
   });
 
@@ -348,6 +465,7 @@ function onFieldChange(e) {
     const q = getQuestion(pid, qid);
     if (q) q[field] = el.value;
   }
+  saveToStorage();
   updatePreview();
 }
 
@@ -451,13 +569,23 @@ document.getElementById('addPartBtn').addEventListener('click', () => {
     instruction: 'Answer all questions.',
     questions: [{ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [] }]
   });
+  saveToStorage();
   renderEditor(); updatePreview();
 });
+
+// ── DATA PERSISTENCE ACTIONS ──────────────────────────────
+document.getElementById('resetBtn')?.addEventListener('click', resetEditor);
+document.getElementById('exportBtn')?.addEventListener('click', exportData);
+document.getElementById('importFile')?.addEventListener('change', importData);
+document.getElementById('importBtn')?.addEventListener('click', () => document.getElementById('importFile').click());
 
 // ── HEADER FIELD LIVE UPDATE ────────────────────────────────
 ['paperCode', 'examTitle1', 'examTitle2', 'examDate', 'department',
   'subjectName', 'examTime', 'maxMarks', 'footerText'].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', updatePreview);
+    document.getElementById(id)?.addEventListener('input', () => {
+      saveToStorage();
+      updatePreview();
+    });
   });
 
 // ── TOGGLE PANEL ───────────────────────────────────────────
@@ -531,5 +659,6 @@ document.getElementById('subjectName').value = 'DATA BASE MANAGEMENT SYSTEMS';
 document.getElementById('examTime').value = '1 Hour';
 document.getElementById('maxMarks').value = '20';
 
+loadFromStorage();
 renderEditor();
 updatePreview();
