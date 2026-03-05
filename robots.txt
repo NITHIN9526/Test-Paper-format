@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nithin9526.github.io/Test-Paper-format/sitemap.xml
