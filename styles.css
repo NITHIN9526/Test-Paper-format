@@ -38,7 +38,7 @@ body {
 /* ── APP LAYOUT ── */
 .app-wrapper {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 38px);
     overflow: hidden;
 }
 
