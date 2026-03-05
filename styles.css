@@ -1,0 +1,966 @@
+/* ========================================
+   QP Editor – styles.css
+   Premium Dark UI + A4 Print Preview
+   ======================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0d0f14;
+    --surface: #161a23;
+    --surface2: #1e2433;
+    --border: #2a3147;
+    --accent: #6c63ff;
+    --accent2: #a78bfa;
+    --green: #22d3a5;
+    --text: #e2e8f0;
+    --text-muted: #8892a8;
+    --danger: #f87171;
+    --editor-w: 400px;
+    --radius: 10px;
+    --font: 'Inter', sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ── APP LAYOUT ── */
+.app-wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ── EDITOR PANEL ── */
+.editor-panel {
+    width: var(--editor-w);
+    min-width: var(--editor-w);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease, min-width 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.editor-panel.collapsed {
+    width: 56px;
+    min-width: 56px;
+}
+
+.editor-panel.collapsed .editor-scroll,
+.editor-panel.collapsed .editor-header h1,
+.editor-panel.collapsed .editor-header p {
+    display: none;
+}
+
+.editor-header {
+    padding: 20px 16px;
+    background: linear-gradient(135deg, #1e2433, #12161f);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 26px;
+}
+
+.logo h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.toggle-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* Scrollable editor body */
+.editor-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.editor-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.editor-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.editor-scroll::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+/* ── SECTION ── */
+.editor-section {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+}
+
+.section-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* ── FIELDS ── */
+.field-group {
+    margin-bottom: 10px;
+}
+
+.field-group:last-child {
+    margin-bottom: 0;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.field-group input,
+.field-group textarea,
+.field-group select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.82rem;
+    padding: 8px 10px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    resize: vertical;
+}
+
+.field-group input:focus,
+.field-group textarea:focus,
+.field-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.field-group textarea {
+    min-height: 64px;
+}
+
+.field-row {
+    display: flex;
+    gap: 10px;
+}
+
+.field-row .field-group {
+    flex: 1;
+}
+
+/* ── PARTS ── */
+.part-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    margin-top: 12px;
+    position: relative;
+}
+
+.part-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.part-card-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent2);
+}
+
+.part-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-icon {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-icon:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.btn-icon.danger:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* Questions inside part */
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.question-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+}
+
+.question-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.qn-number {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.7rem;
+    border-radius: 5px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+
+.question-fields {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inline-row {
+    display: flex;
+    gap: 6px;
+}
+
+.inline-row .field-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.remove-q-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 4px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.remove-q-btn:hover {
+    color: var(--danger);
+}
+
+.add-q-btn {
+    width: 100%;
+    margin-top: 8px;
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 7px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-q-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(108, 99, 255, 0.06);
+}
+
+/* ── ADD PART BTN ── */
+.add-part-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(167, 139, 250, 0.08));
+    border: 1px dashed var(--accent);
+    border-radius: var(--radius);
+    color: var(--accent2);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-part-btn:hover {
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.25), rgba(167, 139, 250, 0.15));
+}
+
+/* ── ACTION BUTTONS ── */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-preview,
+.btn-download {
+    flex: 1;
+    padding: 11px;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+}
+
+.btn-preview {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.btn-preview:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-download {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+}
+
+.btn-download:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(108, 99, 255, 0.5);
+}
+
+.btn-download:active {
+    transform: translateY(0);
+}
+
+/* ── PREVIEW PANEL ── */
+.preview-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #1a1d27;
+    overflow: hidden;
+}
+
+.preview-toolbar {
+    padding: 12px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.preview-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.btn-download-top {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(108, 99, 255, 0.3);
+    transition: all 0.2s;
+}
+
+.btn-download-top:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(108, 99, 255, 0.45);
+}
+
+.preview-viewport {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 24px;
+}
+
+.preview-viewport::-webkit-scrollbar {
+    width: 6px;
+}
+
+.preview-viewport::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.preview-viewport::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+/* ====================================================
+   A4 PAPER PREVIEW – mimics actual printed paper
+   ==================================================== */
+.a4-page {
+    width: 794px;
+    /* 210mm at 96dpi */
+    min-height: 1123px;
+    /* 297mm at 96dpi */
+    background: #fff;
+    color: #000;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    padding: 28mm 20mm 20mm 20mm;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    position: relative;
+}
+
+/* Header area */
+.qp-meta-line {
+    font-size: 11pt;
+    margin-bottom: 2px;
+}
+
+.qp-roll-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1px;
+}
+
+.qp-class-row {
+    margin-bottom: 16px;
+}
+
+.qp-title-block {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.qp-title-block .t1 {
+    font-weight: bold;
+    font-size: 13pt;
+    letter-spacing: 0.04em;
+}
+
+.qp-title-block .t2 {
+    font-weight: bold;
+    font-size: 13pt;
+    letter-spacing: 0.04em;
+}
+
+.qp-title-block .t3 {
+    font-weight: bold;
+    font-size: 12pt;
+    letter-spacing: 0.02em;
+}
+
+.qp-title-block .dept {
+    font-size: 12pt;
+}
+
+.qp-title-block .subj {
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+.qp-timemark {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 11pt;
+}
+
+/* Part heading */
+.qp-part-heading {
+    text-align: center;
+    margin: 18px 0 4px;
+}
+
+.qp-part-heading .ph-title {
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+.qp-part-heading .ph-instr {
+    font-size: 11pt;
+}
+
+.qp-part-heading .ph-instr em {
+    font-style: italic;
+}
+
+/* Table */
+.qp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    font-size: 11pt;
+}
+
+.qp-table th {
+    border: 1.2px solid #000;
+    padding: 4px 6px;
+    font-weight: bold;
+    text-align: left;
+    background: #fff;
+}
+
+.qp-table td {
+    border: 1.2px solid #000;
+    padding: 4px 6px;
+    vertical-align: top;
+}
+
+.qp-table .col-qn {
+    width: 34px;
+    text-align: center;
+}
+
+.qp-table .col-q {}
+
+.qp-table .col-co {
+    width: 44px;
+    text-align: center;
+}
+
+.qp-table .col-btl {
+    width: 38px;
+    text-align: center;
+}
+
+/* Footer */
+.qp-footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 12pt;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+}
+
+/* ──────────────────────────────
+   PRINT STYLES – for PDF export
+   ────────────────────────────── */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    body {
+        background: #fff !important;
+    }
+
+    .app-wrapper {
+        display: block;
+    }
+
+    .editor-panel {
+        display: none !important;
+    }
+
+    .preview-toolbar {
+        display: none !important;
+    }
+
+    .preview-panel {
+        background: #fff !important;
+    }
+
+    .preview-viewport {
+        padding: 0 !important;
+    }
+
+    .a4-page {
+        width: 210mm !important;
+        min-height: 297mm !important;
+        padding: 20mm !important;
+        box-shadow: none !important;
+        margin: 0 auto;
+        page-break-after: always;
+    }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    .app-wrapper {
+        flex-direction: column;
+    }
+
+    .editor-panel {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-height: 50vh;
+    }
+
+    .preview-panel {
+        flex: 1;
+    }
+
+    .a4-page {
+        width: 100%;
+        transform-origin: top left;
+        transform: scale(0.6);
+    }
+}
+
+/* ── TOAST notification ── */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: linear-gradient(135deg, #22d3a5, #0ea5e9);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(34, 211, 165, 0.4);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================================
+   BLOCK EDITOR – Equation, Figure, Code
+   ============================================================ */
+
+/* Row of Insert buttons */
+.add-block-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.add-block-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.add-block-btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.18s;
+    white-space: nowrap;
+}
+
+.eq-btn {
+    border-color: #7c3aed;
+    color: #a78bfa;
+    background: rgba(124, 58, 237, 0.08);
+}
+
+.fig-btn {
+    border-color: #0891b2;
+    color: #67e8f9;
+    background: rgba(8, 145, 178, 0.08);
+}
+
+.code-btn {
+    border-color: #059669;
+    color: #6ee7b7;
+    background: rgba(5, 150, 105, 0.08);
+}
+
+.eq-btn:hover {
+    background: #7c3aed;
+    color: #fff;
+}
+
+.fig-btn:hover {
+    background: #0891b2;
+    color: #fff;
+}
+
+.code-btn:hover {
+    background: #059669;
+    color: #fff;
+}
+
+/* Block cards */
+.block-card {
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid;
+}
+
+.block-equation {
+    border-color: rgba(124, 58, 237, 0.4);
+    background: rgba(124, 58, 237, 0.06);
+}
+
+.block-figure {
+    border-color: rgba(8, 145, 178, 0.4);
+    background: rgba(8, 145, 178, 0.06);
+}
+
+.block-code {
+    border-color: rgba(5, 150, 105, 0.4);
+    background: rgba(5, 150, 105, 0.06);
+}
+
+.block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.block-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.eq-tag {
+    background: rgba(124, 58, 237, 0.25);
+    color: #c4b5fd;
+}
+
+.fig-tag {
+    background: rgba(8, 145, 178, 0.25);
+    color: #67e8f9;
+}
+
+.code-tag {
+    background: rgba(5, 150, 105, 0.25);
+    color: #6ee7b7;
+}
+
+.block-opts {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-check {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.inline-check input {
+    width: auto;
+    accent-color: var(--accent);
+}
+
+.remove-block-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.78rem;
+    padding: 2px 4px;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+.remove-block-btn:hover {
+    color: var(--danger);
+}
+
+/* Figure thumbnail */
+.fig-thumb {
+    max-width: 100%;
+    max-height: 120px;
+    border-radius: 6px;
+    display: block;
+    margin: 6px 0;
+    border: 1px solid var(--border);
+    object-fit: contain;
+}
+
+/* File input styling */
+input[type="file"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 5px;
+    padding: 3px 10px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-right: 8px;
+    transition: all 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Blocks list container */
+.blocks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ============================================================
+   A4 PREVIEW – Equation / Figure / Code block styles
+   ============================================================ */
+.a4-page .qp-eq {
+    font-size: 11pt;
+    margin: 4px 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.a4-page .qp-eq-display {
+    display: block;
+    text-align: center;
+    margin: 8px auto;
+}
+
+.a4-page .qp-eq-inline {
+    display: inline;
+}
+
+.a4-page .qp-figure {
+    margin: 8px 0;
+}
+
+.a4-page .qp-fig-caption {
+    font-size: 9.5pt;
+    color: #444;
+    font-style: italic;
+    margin-top: 3px;
+}
+
+.a4-page .qp-code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 9.5pt;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 6px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: #1a1a1a;
+}
