@@ -11,32 +11,24 @@ function val(id) { return document.getElementById(id)?.value || ''; }
 //   text  - string (question text)
 //   co    - string
 //   btl   - string
+// ── STATE ──────────────────────────────────────────────────
 let parts = [
   {
     id: uid(), name: 'Part A',
-    instruction: 'Answer <em>all</em> questions in one word or one sentence. Each question carries <strong>1 mark</strong>.',
+    instruction: 'Answer <strong>all</strong> questions in one word or one sentence.',
     questions: [
-      { id: uid(), text: 'Define data independence.', co: 'CO1', btl: 'U', blocks: [] },
-      { id: uid(), text: 'Define Tuple.', co: 'CO1', btl: 'U', blocks: [] },
-      { id: uid(), text: 'Give an example for SELECT command in SQL.', co: 'CO2', btl: 'U', blocks: [] },
-      { id: uid(), text: 'The SQL command used to add a new column to an existing table is……………', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'What is the full form of HTML?', co: 'CO1', btl: 'R', blocks: [] },
+      { id: uid(), text: 'Which tag is used to create a hyperlink?', co: 'CO1', btl: 'R', blocks: [] },
+      { id: uid(), text: 'Define the purpose of CSS.', co: 'CO2', btl: 'U', blocks: [] },
     ]
   },
   {
     id: uid(), name: 'Part B',
-    instruction: 'Answer <em>all</em> questions. Each question carries <strong>3 marks</strong>.',
+    instruction: 'Answer <strong>any two</strong> questions. Each carries <strong>5 marks</strong>.',
     questions: [
-      { id: uid(), text: 'Write notes on relational data model.', co: 'CO1', btl: 'U', blocks: [] },
-      { id: uid(), text: 'Discuss the three schema architecture', co: 'CO1', btl: 'U', blocks: [] },
-      { id: uid(), text: 'Assume there is a table named BOOKS with columns category and quantity. Write an SQL query to calculate the total number of books available in each category.', co: 'CO2', btl: 'U', blocks: [] },
-    ]
-  },
-  {
-    id: uid(), name: 'Part C',
-    instruction: 'Answer <em>ANY ONE</em> question. Each question carries <strong>7 marks</strong>.',
-    questions: [
-      { id: uid(), text: 'a) Create a table named STUDENTS with columns for student_id, first_name, last_name and age. Ensure that the student_id column is a primary key and first_name is NOT NULL. Insert three records into the table. b) Retrieve the first_name and last_name of all students whose age is greater than 20. c) Update the STUDENTS table to increase the age of all students by 1', co: 'CO2', btl: 'U', blocks: [] },
-      { id: uid(), text: 'Explain the commands for creating, modifying and deleting tables in SQL.', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'Explain the difference between <div> and <span> tags.', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'How do you center a <div> vertically and horizontally using Flexbox?', co: 'CO3', btl: 'A', blocks: [] },
+      { id: uid(), text: 'Describe the various types of CSS selectors with examples.', co: 'CO2', btl: 'U', blocks: [] },
     ]
   }
 ];
@@ -650,14 +642,14 @@ document.getElementById('previewBtn').addEventListener('click', () => {
 });
 
 // ── INITIAL RENDER ─────────────────────────────────────────
-document.getElementById('paperCode').value = 'TED (21)6151 B';
-document.getElementById('examTitle1').value = 'SIXTH SEMESTER DIPLOMA FIRST SERIES';
-document.getElementById('examTitle2').value = 'EXAMINATION';
-document.getElementById('examDate').value = 'FEBRUARY 2026';
-document.getElementById('department').value = 'Department of Computer Hardware Engineering';
-document.getElementById('subjectName').value = 'DATA BASE MANAGEMENT SYSTEMS';
-document.getElementById('examTime').value = '1 Hour';
-document.getElementById('maxMarks').value = '20';
+document.getElementById('paperCode').value = 'WT (24)101 A';
+document.getElementById('examTitle1').value = 'FIRST SEMESTER BACHELOR OF TECHNOLOGY';
+document.getElementById('examTitle2').value = 'SESSIONAL EXAMINATION';
+document.getElementById('examDate').value = 'MARCH 2026';
+document.getElementById('department').value = 'Department of Information Technology';
+document.getElementById('subjectName').value = 'WEB TECHNOLOGIES & DESIGN';
+document.getElementById('examTime').value = '1.5 Hours';
+document.getElementById('maxMarks').value = '50';
 
 loadFromStorage();
 renderEditor();
