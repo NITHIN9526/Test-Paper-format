@@ -672,7 +672,7 @@ body {
 }
 
 .qp-table .col-q {
-    /* Auto-width */
+    width: auto;
 }
 
 .qp-table .col-co {
@@ -1027,6 +1027,7 @@ input[type="file"]::file-selector-button:hover {
     word-break: break-all;
     color: #1a1a1a;
 }
+
 .app-footer {
     position: fixed;
     bottom: 0;
