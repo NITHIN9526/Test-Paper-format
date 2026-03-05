@@ -15,7 +15,7 @@ function val(id) { return document.getElementById(id)?.value || ''; }
 let parts = [
   {
     id: uid(), name: 'Part A',
-    instruction: 'Answer <strong>all</strong> questions in one word or one sentence.',
+    instruction: 'Answer <em>all</em> questions in one word or one sentence. Each question carries <strong>1 mark</strong>.',
     questions: [
       { id: uid(), text: 'What is the full form of HTML?', co: 'CO1', btl: 'R', blocks: [] },
       { id: uid(), text: 'Which tag is used to create a hyperlink?', co: 'CO1', btl: 'R', blocks: [] },
@@ -24,11 +24,19 @@ let parts = [
   },
   {
     id: uid(), name: 'Part B',
-    instruction: 'Answer <strong>any two</strong> questions. Each carries <strong>5 marks</strong>.',
+    instruction: 'Answer <em>all</em> questions. Each question carries <strong>3 marks</strong>.',
     questions: [
       { id: uid(), text: 'Explain the difference between <div> and <span> tags.', co: 'CO2', btl: 'U', blocks: [] },
       { id: uid(), text: 'How do you center a <div> vertically and horizontally using Flexbox?', co: 'CO3', btl: 'A', blocks: [] },
       { id: uid(), text: 'Describe the various types of CSS selectors with examples.', co: 'CO2', btl: 'U', blocks: [] },
+    ]
+  },
+  {
+    id: uid(), name: 'Part C',
+    instruction: 'Answer <em>ANY ONE</em> question. Each question carries <strong>7 marks</strong>.',
+    questions: [
+      { id: uid(), text: 'Create a simple responsive navigation bar using HTML and CSS.', co: 'CO3', btl: 'A', blocks: [] },
+      { id: uid(), text: 'Explain the CSS Box Model with a neat diagram.', co: 'CO2', btl: 'U', blocks: [] },
     ]
   }
 ];
