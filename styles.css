@@ -1027,3 +1027,22 @@ input[type="file"]::file-selector-button:hover {
     word-break: break-all;
     color: #1a1a1a;
 }
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background: #0d0f14;
+    border-top: 1px solid #2a3147;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #8892a8;
+    z-index: 1000;
+}
+
+.app-footer a {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+}
