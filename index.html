@@ -29,9 +29,11 @@
                     </div>
                 </div>
                 <div class="header-actions">
-                    <button class="btn-head-icon" id="resetBtn" title="Reset/Clear All">🧹</button>
-                    <button class="btn-head-icon" id="exportBtn" title="Export JSON">📤</button>
-                    <button class="btn-head-icon" id="importBtn" title="Import JSON">📥</button>
+                    <button class="btn-head-icon" id="resetBtn" title="Reset/Clear All">🧹 Reset</button>
+                    <button class="btn-head-icon" id="backupBtn" title="Save Backup">💾 Backup</button>
+                    <button class="btn-head-icon" id="restoreBtn" title="Restore Backup">🔄 Restore</button>
+                    <button class="btn-head-icon" id="exportBtn" title="Export JSON">📤 Export</button>
+                    <button class="btn-head-icon" id="importBtn" title="Import JSON">📥 Import</button>
                     <input type="file" id="importFile" accept=".json" style="display:none" />
                     <button class="toggle-btn" id="togglePanel" title="Toggle Editor">‹</button>
                 </div>
@@ -138,6 +140,32 @@
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+    <!-- ====== DRAWING MODAL ====== -->
+    <div class="modal" id="drawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🖌 Draw Figure</h2>
+                <button class="btn-close-modal" id="closeDrawModal">✕</button>
+            </div>
+            <div class="draw-toolbar">
+                <input type="color" id="drawColor" value="#000000" title="Brush Color" />
+                <input type="range" id="drawSize" min="1" max="20" value="3" title="Brush Size" />
+                <button class="draw-tool-btn" id="btnPen" title="Pen">🖊</button>
+                <button class="draw-tool-btn" id="btnEraser" title="Eraser">🧹</button>
+                <div style="flex:1"></div>
+                <button class="draw-tool-btn danger" id="btnClearCanvas" title="Clear Canvas">Clear All</button>
+            </div>
+            <div class="canvas-container">
+                <canvas id="drawCanvas" width="600" height="400"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-preview" id="btnCancelDraw">Cancel</button>
+                <button class="btn-download" id="btnSaveDraw">Save Drawing</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 

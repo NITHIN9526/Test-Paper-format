@@ -134,6 +134,52 @@ function importData(e) {
   reader.readAsText(file);
 }
 
+function saveBackup() {
+  const data = {
+    parts,
+    header: {
+      paperCode: val('paperCode'),
+      examTitle1: val('examTitle1'),
+      examTitle2: val('examTitle2'),
+      examDate: val('examDate'),
+      department: val('department'),
+      subjectName: val('subjectName'),
+      examTime: val('examTime'),
+      maxMarks: val('maxMarks'),
+      footerText: val('footerText')
+    }
+  };
+  localStorage.setItem('qp_editor_manual_backup', JSON.stringify(data));
+  showToast('Manual backup saved! 💾');
+}
+
+function restoreBackup() {
+  const saved = localStorage.getItem('qp_editor_manual_backup');
+  if (saved) {
+    if (confirm('Are you sure you want to restore the manual backup? Current unsaved changes will be lost.')) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.parts) parts = data.parts;
+        if (data.header) {
+          Object.keys(data.header).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = data.header[id];
+          });
+        }
+        saveToStorage();
+        renderEditor();
+        updatePreview();
+        showToast('Backup restored! 🔄');
+      } catch (e) {
+        console.error('Restore error:', e);
+        showToast('Error restoring backup!');
+      }
+    }
+  } else {
+    showToast('No manual backup found! ❌');
+  }
+}
+
 // ── QUESTION NUMBER ─────────────────────────────────────────
 function getGlobalQuestionNumber(partIdx, qIdx) {
   let count = 1;
@@ -167,9 +213,14 @@ function blockEditorHtml(pid, qid, block) {
           <span class="block-tag fig-tag">🖼 Figure</span>
           <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}">✕</button>
         </div>
-        <div class="field-group" style="margin:0 0 6px">
-          <label>Upload Image</label>
-          <input type="file" accept="image/*" class="fig-upload" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" />
+        <div class="field-row">
+          <div class="field-group" style="margin:0 0 6px; flex: 1;">
+            <label>Upload Image</label>
+            <input type="file" accept="image/*" class="fig-upload" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" />
+          </div>
+          <div class="field-group" style="margin:0 0 6px; display: flex; align-items: flex-end;">
+            <button class="btn-preview open-draw-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" style="padding: 8px 12px; height: 35px; width: 100%;">🖌 Draw</button>
+          </div>
         </div>
         ${b.src ? `<img src="${b.src}" class="fig-thumb" alt="figure" />` : ''}
         <div class="field-group" style="margin:6px 0 0">
@@ -504,7 +555,7 @@ function updatePreview() {
     part.questions.forEach(q => {
       const blocksHtml = renderBlocksPreview(q.blocks);
       rows += `
-        <tr>
+        <tr data-qid="${q.id}" class="preview-question-row" style="cursor: pointer;" title="Click to edit">
           <td class="col-qn">${globalN++}</td>
           <td class="col-q">
             ${q.text.replace(/\n/g, '<br>')}
@@ -575,6 +626,8 @@ document.getElementById('addPartBtn').addEventListener('click', () => {
 
 // ── DATA PERSISTENCE ACTIONS ──────────────────────────────
 document.getElementById('resetBtn')?.addEventListener('click', resetEditor);
+document.getElementById('backupBtn')?.addEventListener('click', saveBackup);
+document.getElementById('restoreBtn')?.addEventListener('click', restoreBackup);
 document.getElementById('exportBtn')?.addEventListener('click', exportData);
 document.getElementById('importFile')?.addEventListener('change', importData);
 document.getElementById('importBtn')?.addEventListener('click', () => document.getElementById('importFile').click());
@@ -649,6 +702,26 @@ document.getElementById('previewBtn').addEventListener('click', () => {
   document.querySelector('.preview-viewport').scrollIntoView({ behavior: 'smooth' });
 });
 
+// ── CLICK TO SCROLL TO EDITOR ───────────────────────
+document.getElementById('a4Preview').addEventListener('click', (e) => {
+  const row = e.target.closest('.preview-question-row');
+  if (row) {
+    const qid = row.dataset.qid;
+    const card = document.querySelector(`.question-card[data-qid="${qid}"]`);
+    if (card) {
+      // If panel is collapsed, uncollapse it
+      const panel = document.getElementById('editorPanel');
+      if (panel.classList.contains('collapsed')) {
+        document.getElementById('togglePanel').click();
+      }
+      
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('highlight-card');
+      setTimeout(() => card.classList.remove('highlight-card'), 2000);
+    }
+  }
+});
+
 // ── INITIAL RENDER ─────────────────────────────────────────
 document.getElementById('paperCode').value = 'WT (24)101 A';
 document.getElementById('examTitle1').value = 'FIRST SEMESTER BACHELOR OF TECHNOLOGY';
@@ -662,3 +735,152 @@ document.getElementById('maxMarks').value = '50';
 loadFromStorage();
 renderEditor();
 updatePreview();
+
+// ── DRAWING CANVAS LOGIC ──────────────────────────────────────
+const drawModal = document.getElementById('drawModal');
+const drawCanvas = document.getElementById('drawCanvas');
+const ctx = drawCanvas.getContext('2d');
+let currentDrawTarget = null; // {pid, qid, bid}
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let isEraser = false;
+
+// Tools
+const drawColor = document.getElementById('drawColor');
+const drawSize = document.getElementById('drawSize');
+const btnPen = document.getElementById('btnPen');
+const btnEraser = document.getElementById('btnEraser');
+
+function initCanvas() {
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('open-draw-btn')) {
+    currentDrawTarget = {
+      pid: e.target.dataset.pid,
+      qid: e.target.dataset.qid,
+      bid: e.target.dataset.bid
+    };
+    initCanvas();
+    // Pre-fill if there is already an image
+    const b = getBlock(currentDrawTarget.pid, currentDrawTarget.qid, currentDrawTarget.bid);
+    if (b && b.src) {
+        const img = new Image();
+        img.onload = () => {
+            // Draw image scaled to fit canvas
+            ctx.drawImage(img, 0, 0, drawCanvas.width, drawCanvas.height);
+        };
+        img.src = b.src;
+    }
+    
+    drawModal.classList.add('show');
+    btnPen.click(); // Select pen by default
+  }
+});
+
+document.getElementById('closeDrawModal').addEventListener('click', () => {
+  drawModal.classList.remove('show');
+});
+document.getElementById('btnCancelDraw').addEventListener('click', () => {
+  drawModal.classList.remove('show');
+});
+
+document.getElementById('btnClearCanvas').addEventListener('click', () => {
+  if(confirm("Are you sure you want to clear the canvas?")) {
+      initCanvas();
+  }
+});
+
+btnPen.addEventListener('click', () => {
+  isEraser = false;
+  btnPen.classList.add('active');
+  btnEraser.classList.remove('active');
+});
+
+btnEraser.addEventListener('click', () => {
+  isEraser = true;
+  btnEraser.classList.add('active');
+  btnPen.classList.remove('active');
+});
+
+function getMousePos(canvas, evt) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return {
+    x: (evt.clientX - rect.left) * scaleX,
+    y: (evt.clientY - rect.top) * scaleY
+  };
+}
+
+// Mouse events
+drawCanvas.addEventListener('mousedown', (e) => {
+  isDrawing = true;
+  const pos = getMousePos(drawCanvas, e);
+  lastX = pos.x;
+  lastY = pos.y;
+});
+
+drawCanvas.addEventListener('mousemove', (e) => {
+  if (!isDrawing) return;
+  const pos = getMousePos(drawCanvas, e);
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.strokeStyle = isEraser ? '#ffffff' : drawColor.value;
+  ctx.lineWidth = drawSize.value;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  lastX = pos.x;
+  lastY = pos.y;
+});
+
+drawCanvas.addEventListener('mouseup', () => isDrawing = false);
+drawCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+// Touch events for mobile/tablet
+drawCanvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  isDrawing = true;
+  const touch = e.touches[0];
+  const pos = getMousePos(drawCanvas, touch);
+  lastX = pos.x;
+  lastY = pos.y;
+}, { passive: false });
+
+drawCanvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (!isDrawing) return;
+  const touch = e.touches[0];
+  const pos = getMousePos(drawCanvas, touch);
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.strokeStyle = isEraser ? '#ffffff' : drawColor.value;
+  ctx.lineWidth = drawSize.value;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  lastX = pos.x;
+  lastY = pos.y;
+}, { passive: false });
+
+drawCanvas.addEventListener('touchend', () => isDrawing = false);
+
+document.getElementById('btnSaveDraw').addEventListener('click', () => {
+  if (currentDrawTarget) {
+    const dataUrl = drawCanvas.toDataURL('image/png');
+    const b = getBlock(currentDrawTarget.pid, currentDrawTarget.qid, currentDrawTarget.bid);
+    if (b) {
+      b.src = dataUrl;
+      saveToStorage();
+      renderEditor();
+      updatePreview();
+    }
+  }
+  drawModal.classList.remove('show');
+});

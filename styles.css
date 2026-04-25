@@ -22,7 +22,7 @@
     --text: #e2e8f0;
     --text-muted: #8892a8;
     --danger: #f87171;
-    --editor-w: 400px;
+    --editor-w: 480px;
     --radius: 10px;
     --font: 'Inter', sans-serif;
 }
@@ -74,6 +74,8 @@ body {
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .logo {
@@ -128,21 +130,24 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 .btn-head-icon {
     background: var(--surface2);
     border: 1px solid var(--border);
     color: var(--text-muted);
-    width: 28px;
     height: 28px;
+    padding: 0 8px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.72rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .btn-head-icon:hover {
@@ -320,6 +325,13 @@ body {
     border-radius: 8px;
     padding: 10px;
     position: relative;
+    transition: all 0.3s ease;
+}
+
+.highlight-card {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 8px rgba(108, 99, 255, 0.6) !important;
+    background: rgba(108, 99, 255, 0.05) !important;
 }
 
 .question-row {
@@ -1046,4 +1058,123 @@ input[type="file"]::file-selector-button:hover {
     color: #6c63ff;
     text-decoration: none;
     font-weight: bold;
+}
+
+/* ============================================================
+   DRAWING MODAL
+   ============================================================ */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal.show {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    width: 640px;
+    max-width: 90vw;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.btn-close-modal {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: var(--danger);
+}
+
+.draw-toolbar {
+    display: flex;
+    gap: 10px;
+    background: var(--surface2);
+    padding: 10px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    align-items: center;
+}
+
+.draw-tool-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+
+.draw-tool-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.draw-tool-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.draw-tool-btn.danger:hover {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+.canvas-container {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: crosshair;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
 }
