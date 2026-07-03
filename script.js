@@ -658,29 +658,32 @@ function downloadPDF() {
   const origPadding = element.style.padding;
   const origBoxShadow = element.style.boxShadow;
   const origMinHeight = element.style.minHeight;
+  const origTransform = element.style.transform;
 
   // Temporarily apply print-friendly sizing so content is centred on A4
   element.style.width = '190mm';        // 210mm page − 10mm margin each side
   element.style.padding = '15mm 10mm 15mm 10mm';
   element.style.boxShadow = 'none';
   element.style.minHeight = 'auto';
+  element.style.transform = 'none';
 
   const opt = {
     margin: [10, 10, 10, 10],          // equal margins → centred
     filename: 'question-paper.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, letterRendering: true, allowTaint: true },
+    image: { type: 'jpeg', quality: 1.0 }, // Max quality
+    html2canvas: { scale: 5, useCORS: true, letterRendering: true, allowTaint: true }, // Scale 5 for ultra high-res (crisp on zoom)
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
-  showToast('Generating PDF…');
+  showToast('Generating High-Quality PDF…');
   html2pdf().set(opt).from(element).save().then(() => {
     // Restore original styles
     element.style.width = origWidth;
     element.style.padding = origPadding;
     element.style.boxShadow = origBoxShadow;
     element.style.minHeight = origMinHeight;
+    element.style.transform = origTransform;
     showToast('PDF downloaded! ✔');
   });
 }
@@ -883,4 +886,46 @@ document.getElementById('btnSaveDraw').addEventListener('click', () => {
     }
   }
   drawModal.classList.remove('show');
+});
+
+// ── ZOOM LOGIC ────────────────────────────────────────────────
+let currentZoom = 1;
+const zoomLevelEl = document.getElementById('zoomLevel');
+const a4PreviewEl = document.getElementById('a4Preview');
+
+function applyZoom() {
+  a4PreviewEl.style.transform = `scale(${currentZoom})`;
+  zoomLevelEl.textContent = `${Math.round(currentZoom * 100)}%`;
+}
+
+document.getElementById('zoomInBtn')?.addEventListener('click', () => {
+  if (currentZoom < 2.5) {
+    currentZoom += 0.1;
+    applyZoom();
+  }
+});
+
+document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
+  if (currentZoom > 0.4) {
+    currentZoom -= 0.1;
+    applyZoom();
+  }
+});
+
+// ── THEME TOGGLE ──────────────────────────────────────────────
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-mode');
+  if (themeToggleBtn) themeToggleBtn.innerHTML = '☀️ Light Mode';
+}
+
+themeToggleBtn?.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  if (document.body.classList.contains('dark-mode')) {
+    localStorage.setItem('theme', 'dark');
+    themeToggleBtn.innerHTML = '☀️ Light Mode';
+  } else {
+    localStorage.setItem('theme', 'light');
+    themeToggleBtn.innerHTML = '🌙 Dark Mode';
+  }
 });

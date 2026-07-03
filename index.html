@@ -112,7 +112,15 @@
         <main class="preview-panel">
             <div class="preview-toolbar">
                 <span class="preview-label">Preview – A4</span>
-                <button class="btn-download-top" id="downloadBtnTop">⬇ Download PDF</button>
+                <div class="zoom-controls">
+                    <button class="btn-zoom" id="zoomOutBtn" title="Zoom Out">−</button>
+                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <button class="btn-zoom" id="zoomInBtn" title="Zoom In">+</button>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn-theme-toggle" id="themeToggleBtn" title="Toggle Theme">🌙 Dark Mode</button>
+                    <button class="btn-download-top" id="downloadBtnTop">⬇ Download PDF</button>
+                </div>
             </div>
 
             <div class="preview-viewport">
