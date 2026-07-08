@@ -4,7 +4,9 @@ A professional, high-performance web application designed for educators to easil
 
 ## ✨ Key Features
 
-- **🚀 Live A4 Preview:** See exactly how your question paper will look on paper as you edit.
+- **🚀 Live A4 & A3 Preview:** See exactly how your question paper will look on paper as you edit, with real-time zooming controls.
+- **📄 Dual Copy Layout (A3 Landscape):** Generate side-by-side duplicate copies of your question paper on a single A3 landscape sheet. Ideal for printing and cutting in half to save paper, featuring a dashed cutting guideline down the center.
+- **🔤 Custom Font Sizing:** Change font sizes for individual questions dynamically (via preset dropdown suggestions or manual numerical input from 6–72pt), with a quick "Apply All" feature to match sizes globally.
 - **📐 Rich Content Support:**
   - **LaTeX Equations:** Render complex mathematical formulas using MathJax.
   - **Figures & Images:** Upload and align diagrams with custom captions and widths.
@@ -12,7 +14,7 @@ A professional, high-performance web application designed for educators to easil
 - **💾 Advanced Persistence:**
   - **Auto-Save:** Never lose work; changes are saved to LocalStorage automatically.
   - **Export/Import JSON:** Save your paper structure to a portable `.json` file and reload it anytime.
-- **↗️ Professional PDF Export:** Generate print-ready A4 PDFs with one click.
+- **↗️ Professional PDF Export:** Generate print-ready standard A4 portrait PDFs or dual-copy A3 landscape PDFs with one click.
 - **↕️ Dynamic Reordering:** Easily move questions or entire parts up and down to restructure your exam.
 - **🎨 Premium Dark UI:** A sleek, modern editor interface designed for focus and productivity.
 
