@@ -311,8 +311,14 @@ function renderEditor() {
               <div class="field-group" style="margin-bottom: 0;">
                 <label>Font Size (pt)</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
-                  <input type="text" list="fontSizePresets" placeholder="e.g. 11pt or 14pt" value="${q.fontSize || ''}" data-field="fontSize" data-pid="${part.id}" data-qid="${q.id}" style="flex: 1;" />
-                  <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this font size to ALL questions">⬇ Apply All</button>
+                  <select class="font-size-select" data-pid="${part.id}" data-qid="${q.id}" style="flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; color: var(--text); font-family: var(--font); font-size: 0.82rem; padding: 8px 10px; outline: none; cursor: pointer;">
+                    <option value="">— Preset —</option>
+                    ${[8,9,10,11,12,13,14,16,18,20,24,28,32,36].map(s =>
+                      `<option value="${s}pt" ${(q.fontSize === s+'pt') ? 'selected' : ''}>${s}pt</option>`
+                    ).join('')}
+                  </select>
+                  <input type="number" class="font-size-manual" min="6" max="72" step="0.5" placeholder="or type" value="${q.fontSize ? parseFloat(q.fontSize) : ''}" data-pid="${part.id}" data-qid="${q.id}" style="width: 72px; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; color: var(--text); font-family: var(--font); font-size: 0.82rem; padding: 8px 6px; outline: none; text-align: center;" title="Enter custom size (6–72)" />
+                  <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this font size to ALL questions">⬇ All</button>
                 </div>
               </div>
               <!-- Blocks (equations, figures, code) -->
@@ -498,6 +504,38 @@ function attachEditorEvents() {
     el.addEventListener('input', () => {
       const b = getBlock(el.dataset.pid, el.dataset.qid, el.dataset.bid);
       if (b) { b.code = el.value; updatePreview(); }
+    });
+  });
+
+  // ── FONT SIZE SELECT (preset dropdown) ──
+  document.querySelectorAll('.font-size-select').forEach(el => {
+    el.addEventListener('change', () => {
+      const q = getQuestion(el.dataset.pid, el.dataset.qid);
+      if (!q) return;
+      q.fontSize = el.value; // e.g. "12pt" or "" for reset
+      // Sync the manual input next to it
+      const manual = el.parentElement.querySelector('.font-size-manual');
+      if (manual) manual.value = el.value ? parseFloat(el.value) : '';
+      saveToStorage();
+      updatePreview();
+    });
+  });
+
+  // ── FONT SIZE MANUAL INPUT (number input) ──
+  document.querySelectorAll('.font-size-manual').forEach(el => {
+    el.addEventListener('input', () => {
+      const q = getQuestion(el.dataset.pid, el.dataset.qid);
+      if (!q) return;
+      const num = parseFloat(el.value);
+      q.fontSize = (!isNaN(num) && num > 0) ? num + 'pt' : '';
+      // Sync the select to match if it's a preset value
+      const sel = el.parentElement.querySelector('.font-size-select');
+      if (sel) {
+        const matchOpt = Array.from(sel.options).find(o => o.value === q.fontSize);
+        sel.value = matchOpt ? q.fontSize : '';
+      }
+      saveToStorage();
+      updatePreview();
     });
   });
 
