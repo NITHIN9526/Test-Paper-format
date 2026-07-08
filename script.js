@@ -782,12 +782,12 @@ document.getElementById('a4Preview').addEventListener('click', (e) => {
 });
 
 // ── INITIAL RENDER ─────────────────────────────────────────
-document.getElementById('paperCode').value = 'WT (24)101 A';
-document.getElementById('examTitle1').value = 'FIRST SEMESTER BACHELOR OF TECHNOLOGY';
-document.getElementById('examTitle2').value = 'SESSIONAL EXAMINATION';
-document.getElementById('examDate').value = 'MARCH 2026';
-document.getElementById('department').value = 'Department of Information Technology';
-document.getElementById('subjectName').value = 'WEB TECHNOLOGIES & DESIGN';
+document.getElementById('paperCode').value = '';
+document.getElementById('examTitle1').value = 'FIFTH SEMESTER DIPLOMA EXAMINATION';
+document.getElementById('examTitle2').value = 'FIRST SERIES TEST';
+document.getElementById('examDate').value = 'JULY 2026';
+document.getElementById('department').value = 'Department of Computer Hardware Engineering';
+document.getElementById('subjectName').value = 'WEB PROGRAMMING';
 document.getElementById('examTime').value = '1.5 Hours';
 document.getElementById('maxMarks').value = '50';
 
