@@ -621,6 +621,37 @@ body {
     transition: transform 0.2s ease-out;
 }
 
+/* A3 Landscape Dual Copy Layout */
+.a4-page.layout-a3-dual {
+    width: 1588px; /* A3 Landscape width at 96dpi (twice A4 width 794px) */
+    min-height: 1123px; /* A3 Landscape height */
+    padding: 0;
+}
+
+.a4-page.layout-a3-dual .qp-columns-wrapper {
+    display: flex;
+    gap: 0;
+    height: 100%;
+    position: relative;
+}
+
+.a4-page.layout-a3-dual .qp-column-copy {
+    width: 50%;
+    padding: 28mm 20mm 20mm 20mm;
+    box-sizing: border-box;
+}
+
+/* Center guideline for cutting A3 in half */
+.a4-page.layout-a3-dual .qp-columns-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px dashed #bbb;
+    transform: translateX(-50%);
+}
+
 /* Header area */
 .qp-meta-line {
     font-size: 11pt;
@@ -631,6 +662,10 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1px;
+}
+
+.qp-roll-row span {
+    white-space: nowrap;
 }
 
 .qp-class-row {
@@ -784,6 +819,13 @@ body {
         padding: 20mm !important;
         box-shadow: none !important;
         margin: 0 auto;
+        page-break-after: always;
+    }
+
+    .a4-page.layout-a3-dual {
+        width: 420mm !important;
+        min-height: 297mm !important;
+        padding: 0 !important;
         page-break-after: always;
     }
 }

@@ -117,6 +117,13 @@
                     <span class="zoom-level" id="zoomLevel">100%</span>
                     <button class="btn-zoom" id="zoomInBtn" title="Zoom In">+</button>
                 </div>
+                <div class="zoom-controls">
+                    <label style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; margin-right: 4px;">Layout:</label>
+                    <select id="layoutSelect" style="background: transparent; border: none; color: var(--text); font-size: 0.8rem; outline: none; cursor: pointer; font-weight: 500;">
+                        <option value="1up" style="background: var(--surface); color: var(--text);">Standard (A4 Portrait)</option>
+                        <option value="a3-dual" style="background: var(--surface); color: var(--text);">Dual Copy (A3 Landscape)</option>
+                    </select>
+                </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
                     <button class="btn-theme-toggle" id="themeToggleBtn" title="Toggle Theme">🌙 Dark Mode</button>
                     <button class="btn-download-top" id="downloadBtnTop">⬇ Download PDF</button>

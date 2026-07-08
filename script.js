@@ -547,6 +547,14 @@ function renderBlocksPreview(blocks) {
 function updatePreview() {
   const h = { paperCode: val('paperCode'), examTitle1: val('examTitle1'), examTitle2: val('examTitle2'), examDate: val('examDate'), department: val('department'), subjectName: val('subjectName'), examTime: val('examTime'), maxMarks: val('maxMarks'), footerText: val('footerText') };
   const preview = document.getElementById('a4Preview');
+  const layout = document.getElementById('layoutSelect')?.value || '1up';
+
+  if (layout === 'a3-dual') {
+    preview.classList.add('layout-a3-dual');
+  } else {
+    preview.classList.remove('layout-a3-dual');
+  }
+
   let globalN = 1;
   let partsHtml = '';
 
@@ -582,7 +590,7 @@ function updatePreview() {
       </table>`;
   });
 
-  preview.innerHTML = `
+  const paperHtml = `
     <div class="qp-meta-line"><strong>${h.paperCode}</strong></div>
     <div class="qp-roll-row">
       <span>Roll No :………………</span>
@@ -605,6 +613,17 @@ function updatePreview() {
     ${partsHtml}
     <div class="qp-footer">${h.footerText}</div>
   `;
+
+  if (layout === 'a3-dual') {
+    preview.innerHTML = `
+      <div class="qp-columns-wrapper">
+        <div class="qp-column-copy">${paperHtml}</div>
+        <div class="qp-column-copy">${paperHtml}</div>
+      </div>
+    `;
+  } else {
+    preview.innerHTML = paperHtml;
+  }
 
   // Re-typeset MathJax after DOM update
   if (window.MathJax && window.MathJax.typesetPromise) {
@@ -652,6 +671,7 @@ document.getElementById('togglePanel').addEventListener('click', () => {
 // ── PDF DOWNLOAD ───────────────────────────────────────────
 function downloadPDF() {
   const element = document.getElementById('a4Preview');
+  const layout = document.getElementById('layoutSelect')?.value || '1up';
 
   // Save original styles
   const origWidth = element.style.width;
@@ -660,19 +680,28 @@ function downloadPDF() {
   const origMinHeight = element.style.minHeight;
   const origTransform = element.style.transform;
 
-  // Temporarily apply print-friendly sizing so content is centred on A4
-  element.style.width = '190mm';        // 210mm page − 10mm margin each side
-  element.style.padding = '15mm 10mm 15mm 10mm';
+  // Temporarily apply print-friendly sizing so content is centred on target page
+  if (layout === 'a3-dual') {
+    element.style.width = '420mm';        // 420mm full page width
+    element.style.padding = '0';
+  } else {
+    element.style.width = '190mm';        // 210mm page − 10mm margin each side
+    element.style.padding = '15mm 10mm 15mm 10mm';
+  }
   element.style.boxShadow = 'none';
   element.style.minHeight = 'auto';
   element.style.transform = 'none';
 
   const opt = {
-    margin: [10, 10, 10, 10],          // equal margins → centred
-    filename: 'question-paper.pdf',
+    margin: layout === 'a3-dual' ? 0 : [10, 10, 10, 10],          // no margin for full bleed A3, 10mm margins for A4
+    filename: layout === 'a3-dual' ? 'question-paper-a3.pdf' : 'question-paper.pdf',
     image: { type: 'jpeg', quality: 1.0 }, // Max quality
-    html2canvas: { scale: 5, useCORS: true, letterRendering: true, allowTaint: true }, // Scale 5 for ultra high-res (crisp on zoom)
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    html2canvas: { scale: layout === 'a3-dual' ? 3 : 5, useCORS: true, letterRendering: true, allowTaint: true }, // Scale 3 for A3 to save memory, 5 for A4
+    jsPDF: { 
+      unit: 'mm', 
+      format: layout === 'a3-dual' ? 'a3' : 'a4', 
+      orientation: layout === 'a3-dual' ? 'landscape' : 'portrait' 
+    },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
@@ -734,6 +763,16 @@ document.getElementById('department').value = 'Department of Information Technol
 document.getElementById('subjectName').value = 'WEB TECHNOLOGIES & DESIGN';
 document.getElementById('examTime').value = '1.5 Hours';
 document.getElementById('maxMarks').value = '50';
+
+// ── LAYOUT INITIALIZATION ─────────────────────────────────
+const layoutSelect = document.getElementById('layoutSelect');
+if (layoutSelect) {
+  layoutSelect.value = localStorage.getItem('qp_layout') || '1up';
+  layoutSelect.addEventListener('change', () => {
+    localStorage.setItem('qp_layout', layoutSelect.value);
+    updatePreview();
+  });
+}
 
 loadFromStorage();
 renderEditor();
