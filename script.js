@@ -788,8 +788,8 @@ document.getElementById('examTitle2').value = 'FIRST SERIES TEST';
 document.getElementById('examDate').value = 'JULY 2026';
 document.getElementById('department').value = 'Department of Computer Hardware Engineering';
 document.getElementById('subjectName').value = 'WEB PROGRAMMING';
-document.getElementById('examTime').value = '1.5 Hours';
-document.getElementById('maxMarks').value = '50';
+document.getElementById('examTime').value = '1 Hour';
+document.getElementById('maxMarks').value = '20';
 
 // ── LAYOUT INITIALIZATION ─────────────────────────────────
 const layoutSelect = document.getElementById('layoutSelect');
