@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" />
+            <stop offset="100%" stop-color="#2563eb" />
+        </linearGradient>
+    </defs>
+    <!-- Background shape -->
+    <rect x="10" y="10" width="80" height="80" rx="22" fill="url(#bgGrad)" />
+    
+    <!-- Document Icon (Paths) -->
+    <path d="M 32 25 L 55 25 L 68 38 L 68 75 C 68 78 65 80 62 80 L 32 80 C 29 80 26 78 26 75 L 26 30 C 26 27 29 25 32 25 Z" fill="#ffffff" />
+    <!-- Fold -->
+    <path d="M 55 25 L 55 38 L 68 38 Z" fill="#d1d5db" />
+    
+    <!-- Lines in document -->
+    <rect x="36" y="48" width="22" height="4" rx="2" fill="#2563eb" opacity="0.8"/>
+    <rect x="36" y="58" width="16" height="4" rx="2" fill="#2563eb" opacity="0.8"/>
+    <rect x="36" y="68" width="22" height="4" rx="2" fill="#2563eb" opacity="0.8"/>
+</svg>

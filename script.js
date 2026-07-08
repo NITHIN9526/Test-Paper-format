@@ -782,7 +782,7 @@ document.getElementById('a4Preview').addEventListener('click', (e) => {
 });
 
 // ── INITIAL RENDER ─────────────────────────────────────────
-document.getElementById('paperCode').value = '';
+document.getElementById('paperCode').value = 'TED(21)6152A';
 document.getElementById('examTitle1').value = 'FIFTH SEMESTER DIPLOMA EXAMINATION';
 document.getElementById('examTitle2').value = 'FIRST SERIES TEST';
 document.getElementById('examDate').value = 'JULY 2026';
