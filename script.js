@@ -299,20 +299,20 @@ function renderEditor() {
                 <textarea rows="2" data-field="text" data-pid="${part.id}" data-qid="${q.id}">${q.text}</textarea>
               </div>
               <div class="inline-row">
-                <div class="field-group" style="width: 20%; min-width: 50px;">
+                <div class="field-group" style="flex: 1;">
                   <label>CO</label>
                   <input type="text" value="${q.co}" data-field="co" data-pid="${part.id}" data-qid="${q.id}" />
                 </div>
-                <div class="field-group" style="width: 20%; min-width: 50px;">
+                <div class="field-group" style="flex: 1;">
                   <label>BTL</label>
                   <input type="text" value="${q.btl}" data-field="btl" data-pid="${part.id}" data-qid="${q.id}" />
                 </div>
-                <div class="field-group" style="flex: 1;">
-                  <label>Font Size</label>
-                  <div style="display: flex; gap: 4px; align-items: center;">
-                    <input type="text" list="fontSizePresets" placeholder="11pt" value="${q.fontSize || ''}" data-field="fontSize" data-pid="${part.id}" data-qid="${q.id}" style="flex: 1; min-width: 0;" />
-                    <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this size to all questions">Apply All</button>
-                  </div>
+              </div>
+              <div class="field-group" style="margin-bottom: 0;">
+                <label>Font Size (pt)</label>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <input type="text" list="fontSizePresets" placeholder="e.g. 11pt or 14pt" value="${q.fontSize || ''}" data-field="fontSize" data-pid="${part.id}" data-qid="${q.id}" style="flex: 1;" />
+                  <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this font size to ALL questions">⬇ Apply All</button>
                 </div>
               </div>
               <!-- Blocks (equations, figures, code) -->
