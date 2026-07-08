@@ -17,26 +17,26 @@ let parts = [
     id: uid(), name: 'Part A',
     instruction: 'Answer <em>all</em> questions in one word or one sentence. Each question carries <strong>1 mark</strong>.',
     questions: [
-      { id: uid(), text: 'What is the full form of HTML?', co: 'CO1', btl: 'R', blocks: [] },
-      { id: uid(), text: 'Which tag is used to create a hyperlink?', co: 'CO1', btl: 'R', blocks: [] },
-      { id: uid(), text: 'Define the purpose of CSS.', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'What is the full form of HTML?', co: 'CO1', btl: 'R', blocks: [], fontSize: '' },
+      { id: uid(), text: 'Which tag is used to create a hyperlink?', co: 'CO1', btl: 'R', blocks: [], fontSize: '' },
+      { id: uid(), text: 'Define the purpose of CSS.', co: 'CO2', btl: 'U', blocks: [], fontSize: '' },
     ]
   },
   {
     id: uid(), name: 'Part B',
     instruction: 'Answer <em>all</em> questions. Each question carries <strong>3 marks</strong>.',
     questions: [
-      { id: uid(), text: 'Explain the difference between <div> and <span> tags.', co: 'CO2', btl: 'U', blocks: [] },
-      { id: uid(), text: 'How do you center a <div> vertically and horizontally using Flexbox?', co: 'CO3', btl: 'A', blocks: [] },
-      { id: uid(), text: 'Describe the various types of CSS selectors with examples.', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'Explain the difference between <div> and <span> tags.', co: 'CO2', btl: 'U', blocks: [], fontSize: '' },
+      { id: uid(), text: 'How do you center a <div> vertically and horizontally using Flexbox?', co: 'CO3', btl: 'A', blocks: [], fontSize: '' },
+      { id: uid(), text: 'Describe the various types of CSS selectors with examples.', co: 'CO2', btl: 'U', blocks: [], fontSize: '' },
     ]
   },
   {
     id: uid(), name: 'Part C',
     instruction: 'Answer <em>ANY ONE</em> question. Each question carries <strong>7 marks</strong>.',
     questions: [
-      { id: uid(), text: 'Create a simple responsive navigation bar using HTML and CSS.', co: 'CO3', btl: 'A', blocks: [] },
-      { id: uid(), text: 'Explain the CSS Box Model with a neat diagram.', co: 'CO2', btl: 'U', blocks: [] },
+      { id: uid(), text: 'Create a simple responsive navigation bar using HTML and CSS.', co: 'CO3', btl: 'A', blocks: [], fontSize: '' },
+      { id: uid(), text: 'Explain the CSS Box Model with a neat diagram.', co: 'CO2', btl: 'U', blocks: [], fontSize: '' },
     ]
   }
 ];
@@ -299,13 +299,20 @@ function renderEditor() {
                 <textarea rows="2" data-field="text" data-pid="${part.id}" data-qid="${q.id}">${q.text}</textarea>
               </div>
               <div class="inline-row">
-                <div class="field-group">
+                <div class="field-group" style="width: 20%; min-width: 50px;">
                   <label>CO</label>
                   <input type="text" value="${q.co}" data-field="co" data-pid="${part.id}" data-qid="${q.id}" />
                 </div>
-                <div class="field-group">
+                <div class="field-group" style="width: 20%; min-width: 50px;">
                   <label>BTL</label>
                   <input type="text" value="${q.btl}" data-field="btl" data-pid="${part.id}" data-qid="${q.id}" />
+                </div>
+                <div class="field-group" style="flex: 1;">
+                  <label>Font Size</label>
+                  <div style="display: flex; gap: 4px; align-items: center;">
+                    <input type="text" list="fontSizePresets" placeholder="11pt" value="${q.fontSize || ''}" data-field="fontSize" data-pid="${part.id}" data-qid="${q.id}" style="flex: 1; min-width: 0;" />
+                    <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this size to all questions">Apply All</button>
+                  </div>
                 </div>
               </div>
               <!-- Blocks (equations, figures, code) -->
@@ -362,7 +369,7 @@ function attachEditorEvents() {
     btn.addEventListener('click', () => {
       const part = parts.find(p => p.id === btn.dataset.pid);
       if (part) {
-        part.questions.push({ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [] });
+        part.questions.push({ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [], fontSize: '' });
         saveToStorage();
         renderEditor(); updatePreview();
       }
@@ -493,6 +500,25 @@ function attachEditorEvents() {
       if (b) { b.code = el.value; updatePreview(); }
     });
   });
+
+  // ── APPLY ALL FONT SIZE ──
+  document.querySelectorAll('.apply-all-font-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const { pid, qid } = btn.dataset;
+      const q = getQuestion(pid, qid);
+      if (!q) return;
+      const sizeVal = q.fontSize || '';
+      parts.forEach(p => {
+        p.questions.forEach(question => {
+          question.fontSize = sizeVal;
+        });
+      });
+      saveToStorage();
+      renderEditor();
+      updatePreview();
+      showToast(`Font size applied to all questions: ${sizeVal || 'default'}`);
+    });
+  });
 }
 
 function getQuestion(pid, qid) {
@@ -562,8 +588,9 @@ function updatePreview() {
     let rows = '';
     part.questions.forEach(q => {
       const blocksHtml = renderBlocksPreview(q.blocks);
+      const styleAttr = `cursor: pointer;${q.fontSize ? ` font-size: ${q.fontSize};` : ''}`;
       rows += `
-        <tr data-qid="${q.id}" class="preview-question-row" style="cursor: pointer;" title="Click to edit">
+        <tr data-qid="${q.id}" class="preview-question-row" style="${styleAttr}" title="Click to edit">
           <td class="col-qn">${globalN++}</td>
           <td class="col-q">
             ${q.text.replace(/\n/g, '<br>')}
@@ -637,7 +664,7 @@ document.getElementById('addPartBtn').addEventListener('click', () => {
   parts.push({
     id: uid(), name: `Part ${letter}`,
     instruction: 'Answer all questions.',
-    questions: [{ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [] }]
+    questions: [{ id: uid(), text: '', co: 'CO1', btl: 'U', blocks: [], fontSize: '' }]
   });
   saveToStorage();
   renderEditor(); updatePreview();

@@ -435,6 +435,29 @@ body {
     background: rgba(108, 99, 255, 0.06);
 }
 
+.apply-all-font-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.7rem;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 0 8px;
+    height: 32px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.apply-all-font-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(37, 99, 235, 0.05);
+}
+
 /* ── ADD PART BTN ── */
 .add-part-btn {
     width: 100%;
