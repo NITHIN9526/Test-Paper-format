@@ -862,6 +862,7 @@ if (layoutSelect) {
 loadFromStorage();
 renderEditor();
 updatePreview();
+updateMobileZoom();
 
 // ── DRAWING CANVAS LOGIC ──────────────────────────────────────
 const drawModal = document.getElementById('drawModal');
@@ -1034,6 +1035,27 @@ document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
     currentZoom -= 0.1;
     applyZoom();
   }
+});
+
+// ── MOBILE AUTO-ZOOM ─────────────────────────────────────────
+function updateMobileZoom() {
+  if (window.innerWidth > 900) return;
+  const viewport = document.querySelector('.preview-viewport');
+  if (!viewport) return;
+  const available = viewport.clientWidth - 48;
+  const a4Width = 794;
+  const ideal = Math.max(Math.min(available / a4Width, 1), 0.25);
+  if (ideal < 0.95) {
+    currentZoom = Math.round(ideal * 10) / 10;
+    currentZoom = Math.max(currentZoom, 0.3);
+    applyZoom();
+  }
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(updateMobileZoom, 200);
 });
 
 // ── THEME TOGGLE ──────────────────────────────────────────────

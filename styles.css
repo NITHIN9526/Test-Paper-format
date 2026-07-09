@@ -909,7 +909,7 @@ body {
     }
 }
 
-/* ── RESPONSIVE ── */
+/* ── RESPONSIVE: Tablet & below ── */
 @media (max-width: 900px) {
     .app-wrapper {
         flex-direction: column;
@@ -921,14 +921,301 @@ body {
         max-height: 50vh;
     }
 
+    .editor-panel.collapsed {
+        max-height: 44px;
+    }
+
     .preview-panel {
         flex: 1;
+    }
+
+    .preview-toolbar {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 8px 12px;
+    }
+
+    .preview-toolbar > div {
+        flex: 1 1 auto;
+        min-width: 0;
     }
 
     .a4-page {
         width: 100%;
         transform-origin: top left;
-        transform: scale(0.6);
+    }
+}
+
+/* ── RESPONSIVE: Phone ── */
+@media (max-width: 600px) {
+    /* Bigger touch targets */
+    .btn-head-icon,
+    .btn-icon,
+    .remove-q-btn,
+    .add-block-btn,
+    .btn-zoom,
+    .btn-theme-toggle,
+    .btn-download-top,
+    .toggle-btn,
+    .draw-tool-btn,
+    .btn-close-modal,
+    .apply-all-font-btn {
+        min-height: 40px;
+        min-width: 40px;
+    }
+
+    .qn-move-btn {
+        min-height: 28px;
+        min-width: 28px;
+    }
+
+    /* Stack field rows vertically */
+    .field-row,
+    .inline-row {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .field-row .field-group,
+    .inline-row .field-group {
+        flex: none;
+        width: 100%;
+    }
+
+    /* Tighter spacing */
+    .editor-scroll {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .editor-section {
+        padding: 8px;
+    }
+
+    .part-card {
+        padding: 6px;
+        margin-top: 8px;
+    }
+
+    .question-card {
+        padding: 6px;
+    }
+
+    .block-card {
+        padding: 6px;
+    }
+
+    .editor-header {
+        padding: 10px 8px;
+        gap: 6px;
+    }
+
+    .header-actions {
+        gap: 3px;
+    }
+
+    .logo h1 {
+        font-size: 1rem;
+    }
+
+    .logo p {
+        font-size: 0.6rem;
+    }
+
+    /* Font size row: stack */
+    .question-fields .field-group > div[style*="display: flex"] {
+        flex-wrap: wrap;
+    }
+
+    .font-size-select {
+        min-width: 0;
+        font-size: 0.75rem !important;
+        padding: 6px 8px !important;
+    }
+
+    .font-size-manual {
+        width: 60px !important;
+        padding: 6px 4px !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Block insert buttons: smaller */
+    .add-block-row {
+        gap: 3px;
+    }
+
+    .add-block-btn {
+        padding: 5px 6px;
+        font-size: 0.62rem;
+    }
+
+    .add-block-label {
+        font-size: 0.6rem;
+    }
+
+    /* Inline check label */
+    .inline-check {
+        font-size: 0.65rem;
+    }
+
+    /* Modal fills screen better */
+    .modal-content {
+        width: 96vw;
+        max-width: 96vw;
+        padding: 10px;
+    }
+
+    .modal-header h2 {
+        font-size: 0.95rem;
+    }
+
+    .draw-toolbar {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 6px;
+    }
+
+    .draw-toolbar input[type="color"] {
+        width: 36px;
+        height: 36px;
+        padding: 2px;
+    }
+
+    .draw-toolbar input[type="range"] {
+        width: 80px;
+    }
+
+    .canvas-container canvas {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 50vh;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .modal-footer button {
+        width: 100%;
+    }
+
+    /* Footer */
+    .app-footer {
+        position: static;
+        padding: 8px;
+        font-size: 0.65rem;
+    }
+
+    /* Toast */
+    .toast {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        text-align: center;
+        font-size: 0.75rem;
+        padding: 10px 16px;
+    }
+
+    /* Part card title + actions in one row */
+    .part-card-header {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .part-card-title {
+        font-size: 0.72rem;
+    }
+
+    /* Question number side */
+    .qn-number {
+        font-size: 0.6rem;
+        padding: 1px 5px;
+    }
+
+    /* Action buttons at bottom */
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .btn-preview,
+    .btn-download {
+        padding: 9px;
+        font-size: 0.78rem;
+    }
+
+    /* Part action buttons */
+    .part-actions {
+        gap: 3px;
+    }
+
+    /* Add part button */
+    .add-part-btn {
+        font-size: 0.78rem;
+        padding: 8px;
+    }
+
+    /* Blocks list spacing */
+    .blocks-list {
+        gap: 2px;
+    }
+}
+
+/* ── RESPONSIVE: Small Phone ── */
+@media (max-width: 400px) {
+    .editor-header {
+        padding: 6px 4px;
+    }
+
+    .header-actions {
+        gap: 2px;
+    }
+
+    .btn-head-icon {
+        min-height: 32px;
+        min-width: 32px;
+        padding: 0 4px;
+        font-size: 0.6rem;
+    }
+
+    .logo-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .logo h1 {
+        font-size: 0.85rem;
+    }
+
+    .editor-scroll {
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .editor-section {
+        padding: 6px;
+    }
+
+    .add-block-btn {
+        font-size: 0.55rem;
+        padding: 4px 4px;
+    }
+
+    .part-card {
+        padding: 4px;
+    }
+
+    .question-card {
+        padding: 4px;
+    }
+
+    .block-card {
+        padding: 4px;
+    }
+
+    .modal-content {
+        padding: 6px;
     }
 }
 
