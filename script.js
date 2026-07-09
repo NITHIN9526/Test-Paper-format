@@ -626,16 +626,16 @@ function updatePreview() {
     let rows = '';
     part.questions.forEach(q => {
       const blocksHtml = renderBlocksPreview(q.blocks);
-      const styleAttr = `cursor: pointer;${q.fontSize ? ` font-size: ${q.fontSize};` : ''}`;
+      const tdStyle = q.fontSize ? ` style="font-size: ${q.fontSize};"` : '';
       rows += `
-        <tr data-qid="${q.id}" class="preview-question-row" style="${styleAttr}" title="Click to edit">
-          <td class="col-qn">${globalN++}</td>
-          <td class="col-q">
+        <tr data-qid="${q.id}" class="preview-question-row" style="cursor: pointer;" title="Click to edit">
+          <td class="col-qn"${tdStyle}>${globalN++}</td>
+          <td class="col-q"${tdStyle}>
             ${q.text.replace(/\n/g, '<br>')}
             ${blocksHtml}
           </td>
-          <td class="col-co">${q.co}</td>
-          <td class="col-btl">${q.btl}</td>
+          <td class="col-co"${tdStyle}>${q.co}</td>
+          <td class="col-btl"${tdStyle}>${q.btl}</td>
         </tr>`;
     });
 
@@ -745,6 +745,14 @@ function downloadPDF() {
   const origMinHeight = element.style.minHeight;
   const origTransform = element.style.transform;
 
+  function restoreStyles() {
+    element.style.width = origWidth;
+    element.style.padding = origPadding;
+    element.style.boxShadow = origBoxShadow;
+    element.style.minHeight = origMinHeight;
+    element.style.transform = origTransform;
+  }
+
   // Temporarily apply print-friendly sizing so content is centred on target page
   if (layout === 'a3-dual') {
     element.style.width = '420mm';        // 420mm full page width
@@ -758,10 +766,10 @@ function downloadPDF() {
   element.style.transform = 'none';
 
   const opt = {
-    margin: layout === 'a3-dual' ? 0 : [10, 10, 10, 10],          // no margin for full bleed A3, 10mm margins for A4
+    margin: layout === 'a3-dual' ? 0 : [10, 10, 10, 10],
     filename: layout === 'a3-dual' ? 'question-paper-a3.pdf' : 'question-paper.pdf',
-    image: { type: 'jpeg', quality: 1.0 }, // Max quality
-    html2canvas: { scale: layout === 'a3-dual' ? 3 : 5, useCORS: true, letterRendering: true, allowTaint: true }, // Scale 3 for A3 to save memory, 5 for A4
+    image: { type: 'jpeg', quality: 1.0 },
+    html2canvas: { scale: layout === 'a3-dual' ? 3 : 5, useCORS: true, letterRendering: true, allowTaint: true },
     jsPDF: { 
       unit: 'mm', 
       format: layout === 'a3-dual' ? 'a3' : 'a4', 
@@ -771,14 +779,21 @@ function downloadPDF() {
   };
 
   showToast('Generating High-Quality PDF…');
-  html2pdf().set(opt).from(element).save().then(() => {
-    // Restore original styles
-    element.style.width = origWidth;
-    element.style.padding = origPadding;
-    element.style.boxShadow = origBoxShadow;
-    element.style.minHeight = origMinHeight;
-    element.style.transform = origTransform;
+
+  // Wait for MathJax to finish typesetting before generating PDF
+  const mathReady = (window.MathJax && window.MathJax.typesetPromise)
+    ? window.MathJax.typesetPromise([element]).catch(() => {})
+    : Promise.resolve();
+
+  mathReady.then(() => {
+    return html2pdf().set(opt).from(element).save();
+  }).then(() => {
+    restoreStyles();
     showToast('PDF downloaded! ✔');
+  }).catch((err) => {
+    console.error('PDF generation error:', err);
+    restoreStyles();
+    showToast('PDF generation failed! ❌');
   });
 }
 document.getElementById('downloadBtn').addEventListener('click', downloadPDF);
