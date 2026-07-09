@@ -85,7 +85,10 @@ body {
 }
 
 .logo-icon {
-    font-size: 26px;
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+    stroke-width: 1.5;
 }
 
 .logo h1 {
@@ -104,6 +107,59 @@ body {
     margin-top: 2px;
 }
 
+/* ── LUCIDE ICONS ── */
+[data-lucide] {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    line-height: 1;
+}
+
+.btn-head-icon [data-lucide],
+.draw-tool-btn [data-lucide],
+.open-draw-btn [data-lucide],
+.btn-icon [data-lucide],
+.qn-move-btn [data-lucide],
+.add-block-btn [data-lucide],
+.btn-preview [data-lucide],
+.btn-download [data-lucide],
+.apply-all-font-btn [data-lucide],
+.btn-theme-toggle [data-lucide],
+.btn-download-top [data-lucide] {
+    width: 14px;
+    height: 14px;
+    margin-right: 3px;
+    stroke-width: 1.5;
+}
+
+.remove-q-btn [data-lucide],
+.remove-block-btn [data-lucide],
+.btn-close-modal [data-lucide] {
+    width: 14px;
+    height: 14px;
+    stroke-width: 1.5;
+}
+
+.modal-header h2 [data-lucide] {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.block-tag [data-lucide] {
+    width: 13px;
+    height: 13px;
+    margin-right: 3px;
+    stroke-width: 1.5;
+    vertical-align: middle;
+}
+
+/* ── TOGGLE BUTTON ── */
 .toggle-btn {
     background: var(--surface2);
     border: 1px solid var(--border);

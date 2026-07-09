@@ -194,10 +194,10 @@ function blockEditorHtml(pid, qid, block) {
     return `
       <div class="block-card block-equation" data-bid="${b.id}">
         <div class="block-header">
-          <span class="block-tag eq-tag">📐 Equation</span>
+          <span class="block-tag eq-tag"><i data-lucide="sigma"></i> Equation</span>
           <div class="block-opts">
             <label class="inline-check"><input type="checkbox" class="eq-display" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" ${b.display ? 'checked' : ''}/> Display</label>
-            <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}">✕</button>
+            <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}"><i data-lucide="x"></i></button>
           </div>
         </div>
         <div class="field-group" style="margin:0">
@@ -210,8 +210,8 @@ function blockEditorHtml(pid, qid, block) {
     return `
       <div class="block-card block-figure" data-bid="${b.id}">
         <div class="block-header">
-          <span class="block-tag fig-tag">🖼 Figure</span>
-          <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}">✕</button>
+          <span class="block-tag fig-tag"><i data-lucide="image"></i> Figure</span>
+          <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}"><i data-lucide="x"></i></button>
         </div>
         <div class="field-row">
           <div class="field-group" style="margin:0 0 6px; flex: 1;">
@@ -219,7 +219,7 @@ function blockEditorHtml(pid, qid, block) {
             <input type="file" accept="image/*" class="fig-upload" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" />
           </div>
           <div class="field-group" style="margin:0 0 6px; display: flex; align-items: flex-end;">
-            <button class="btn-preview open-draw-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" style="padding: 8px 12px; height: 35px; width: 100%;">🖌 Draw</button>
+            <button class="btn-preview open-draw-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}" style="padding: 8px 12px; height: 35px; width: 100%;"><i data-lucide="pen-tool"></i> Draw</button>
           </div>
         </div>
         ${b.src ? `<img src="${b.src}" class="fig-thumb" alt="figure" />` : ''}
@@ -247,8 +247,8 @@ function blockEditorHtml(pid, qid, block) {
     return `
       <div class="block-card block-code" data-bid="${b.id}">
         <div class="block-header">
-          <span class="block-tag code-tag">💻 Code</span>
-          <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}">✕</button>
+          <span class="block-tag code-tag"><i data-lucide="code-2"></i> Code</span>
+          <button class="remove-block-btn" data-pid="${pid}" data-qid="${qid}" data-bid="${b.id}"><i data-lucide="x"></i></button>
         </div>
         <div class="field-group" style="margin:0">
           <label>Code / Pseudocode</label>
@@ -289,8 +289,8 @@ function renderEditor() {
             <div class="qn-side">
               <span class="qn-number">${globalN}</span>
               <div class="qn-move-btns">
-                <button class="qn-move-btn" data-qaction="moveup" data-pid="${part.id}" data-qid="${q.id}">↑</button>
-                <button class="qn-move-btn" data-qaction="movedown" data-pid="${part.id}" data-qid="${q.id}">↓</button>
+                <button class="qn-move-btn" data-qaction="moveup" data-pid="${part.id}" data-qid="${q.id}"><i data-lucide="chevron-up"></i></button>
+                <button class="qn-move-btn" data-qaction="movedown" data-pid="${part.id}" data-qid="${q.id}"><i data-lucide="chevron-down"></i></button>
               </div>
             </div>
             <div class="question-fields">
@@ -318,7 +318,7 @@ function renderEditor() {
                     ).join('')}
                   </select>
                   <input type="number" class="font-size-manual" min="6" max="72" step="0.5" placeholder="or type" value="${q.fontSize ? parseFloat(q.fontSize) : ''}" data-pid="${part.id}" data-qid="${q.id}" style="width: 72px; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; color: var(--text); font-family: var(--font); font-size: 0.82rem; padding: 8px 6px; outline: none; text-align: center;" title="Enter custom size (6–72)" />
-                  <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this font size to ALL questions">⬇ All</button>
+                  <button type="button" class="apply-all-font-btn" data-pid="${part.id}" data-qid="${q.id}" title="Apply this font size to ALL questions"><i data-lucide="arrow-down"></i> All</button>
                 </div>
               </div>
               <!-- Blocks (equations, figures, code) -->
@@ -326,12 +326,12 @@ function renderEditor() {
               <!-- Add block dropdown -->
               <div class="add-block-row">
                 <span class="add-block-label">Insert:</span>
-                <button class="add-block-btn eq-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="equation">📐 Equation</button>
-                <button class="add-block-btn fig-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="figure">🖼 Figure</button>
-                <button class="add-block-btn code-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="code">💻 Code</button>
+                <button class="add-block-btn eq-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="equation"><i data-lucide="sigma"></i> Equation</button>
+                <button class="add-block-btn fig-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="figure"><i data-lucide="image"></i> Figure</button>
+                <button class="add-block-btn code-btn" data-pid="${part.id}" data-qid="${q.id}" data-btype="code"><i data-lucide="code-2"></i> Code</button>
               </div>
             </div>
-            <button class="remove-q-btn" data-pid="${part.id}" data-qid="${q.id}" title="Remove question">✕</button>
+            <button class="remove-q-btn" data-pid="${part.id}" data-qid="${q.id}" title="Remove question"><i data-lucide="x"></i></button>
           </div>
         </div>`;
     });
@@ -340,9 +340,9 @@ function renderEditor() {
       <div class="part-card-header">
         <span class="part-card-title">${part.name}</span>
         <div class="part-actions">
-          ${pIdx > 0 ? `<button class="btn-icon" data-action="moveup" data-pid="${part.id}">↑</button>` : ''}
-          ${pIdx < parts.length - 1 ? `<button class="btn-icon" data-action="movedown" data-pid="${part.id}">↓</button>` : ''}
-          <button class="btn-icon danger" data-action="removepart" data-pid="${part.id}">🗑</button>
+          ${pIdx > 0 ? `<button class="btn-icon" data-action="moveup" data-pid="${part.id}"><i data-lucide="chevron-up"></i></button>` : ''}
+          ${pIdx < parts.length - 1 ? `<button class="btn-icon" data-action="movedown" data-pid="${part.id}"><i data-lucide="chevron-down"></i></button>` : ''}
+          <button class="btn-icon danger" data-action="removepart" data-pid="${part.id}"><i data-lucide="trash-2"></i></button>
         </div>
       </div>
       <div class="field-group">
@@ -360,6 +360,7 @@ function renderEditor() {
   });
 
   attachEditorEvents();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 // ── EVENTS ─────────────────────────────────────────────────
@@ -694,6 +695,7 @@ function updatePreview() {
   if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise([preview]).catch(err => console.warn('MathJax:', err));
   }
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 // ── ADD PART ───────────────────────────────────────────────
@@ -730,7 +732,10 @@ document.getElementById('togglePanel').addEventListener('click', () => {
   const panel = document.getElementById('editorPanel');
   const btn = document.getElementById('togglePanel');
   panel.classList.toggle('collapsed');
-  btn.textContent = panel.classList.contains('collapsed') ? '›' : '‹';
+  btn.innerHTML = panel.classList.contains('collapsed')
+    ? '<i data-lucide="chevron-right"></i>'
+    : '<i data-lucide="chevron-left"></i>';
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });
 
 // ── PDF DOWNLOAD ───────────────────────────────────────────
@@ -1035,16 +1040,17 @@ document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 if (localStorage.getItem('theme') === 'dark') {
   document.body.classList.add('dark-mode');
-  if (themeToggleBtn) themeToggleBtn.innerHTML = '☀️ Light Mode';
+  if (themeToggleBtn) { themeToggleBtn.innerHTML = '<i data-lucide="sun"></i> Light Mode'; if (typeof lucide !== 'undefined') lucide.createIcons(); }
 }
 
 themeToggleBtn?.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   if (document.body.classList.contains('dark-mode')) {
     localStorage.setItem('theme', 'dark');
-    themeToggleBtn.innerHTML = '☀️ Light Mode';
+    themeToggleBtn.innerHTML = '<i data-lucide="sun"></i> Light Mode';
   } else {
     localStorage.setItem('theme', 'light');
-    themeToggleBtn.innerHTML = '🌙 Dark Mode';
+    themeToggleBtn.innerHTML = '<i data-lucide="moon"></i> Dark Mode';
   }
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });
