@@ -691,7 +691,7 @@ body {
     background: #fff;
     color: #000;
     font-family: 'Times New Roman', Times, serif;
-    font-size: 12pt;
+    font-size: 16pt;
     padding: 28mm 20mm 20mm 20mm;
     box-shadow: 0 8px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
     border-radius: 2px;
@@ -733,7 +733,7 @@ body {
 
 /* Header area */
 .qp-meta-line {
-    font-size: 11pt;
+    font-size: 15pt;
     margin-bottom: 2px;
 }
 
@@ -758,36 +758,36 @@ body {
 
 .qp-title-block .t1 {
     font-weight: bold;
-    font-size: 13pt;
+    font-size: 18pt;
     letter-spacing: 0.04em;
 }
 
 .qp-title-block .t2 {
     font-weight: bold;
-    font-size: 13pt;
+    font-size: 18pt;
     letter-spacing: 0.04em;
 }
 
 .qp-title-block .t3 {
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 16pt;
     letter-spacing: 0.02em;
 }
 
 .qp-title-block .dept {
-    font-size: 12pt;
+    font-size: 16pt;
 }
 
 .qp-title-block .subj {
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 16pt;
 }
 
 .qp-timemark {
     display: flex;
     justify-content: space-between;
     margin-top: 4px;
-    font-size: 11pt;
+    font-size: 15pt;
 }
 
 /* Part heading */
@@ -798,11 +798,11 @@ body {
 
 .qp-part-heading .ph-title {
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 16pt;
 }
 
 .qp-part-heading .ph-instr {
-    font-size: 11pt;
+    font-size: 15pt;
 }
 
 .qp-part-heading .ph-instr em {
@@ -814,7 +814,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-top: 6px;
-    font-size: 11pt;
+    font-size: 15pt;
 }
 
 .qp-table th {
@@ -854,7 +854,7 @@ body {
 .qp-footer {
     text-align: center;
     margin-top: 32px;
-    font-size: 12pt;
+    font-size: 16pt;
     font-weight: bold;
     letter-spacing: 0.06em;
 }
@@ -1448,7 +1448,7 @@ input[type="file"]::file-selector-button:hover {
    A4 PREVIEW – Equation / Figure / Code block styles
    ============================================================ */
 .a4-page .qp-eq {
-    font-size: 11pt;
+    font-size: 15pt;
     margin: 4px 0;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -1468,7 +1468,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .a4-page .qp-fig-caption {
-    font-size: 9.5pt;
+    font-size: 13pt;
     color: #444;
     font-style: italic;
     margin-top: 3px;
@@ -1476,7 +1476,7 @@ input[type="file"]::file-selector-button:hover {
 
 .a4-page .qp-code {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 9.5pt;
+    font-size: 13pt;
     background: #f7f7f7;
     border: 1px solid #ccc;
     border-radius: 4px;
