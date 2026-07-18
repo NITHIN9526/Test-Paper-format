@@ -20,6 +20,7 @@ let parts = [
       { id: uid(), text: 'What is the full form of HTML?', co: 'CO1', btl: 'R', blocks: [], fontSize: '' },
       { id: uid(), text: 'Which tag is used to create a hyperlink?', co: 'CO1', btl: 'R', blocks: [], fontSize: '' },
       { id: uid(), text: 'Define the purpose of CSS.', co: 'CO2', btl: 'U', blocks: [], fontSize: '' },
+      { id: uid(), text: 'What is the correct HTML tag for inserting a line break?', co: 'CO2', btl: 'R', blocks: [], fontSize: '' },
     ]
   },
   {
@@ -623,7 +624,7 @@ function updatePreview() {
   let globalN = 1;
   let partsHtml = '';
 
-  parts.forEach(part => {
+  parts.forEach((part, pIdx) => {
     let rows = '';
     part.questions.forEach(q => {
       const blocksHtml = renderBlocksPreview(q.blocks);
@@ -641,7 +642,7 @@ function updatePreview() {
     });
 
     partsHtml += `
-      <div class="qp-part-heading">
+      <div class="qp-part-heading${pIdx === 2 ? ' print-page-break-before' : ''}">
         <div class="ph-title">${part.name}</div>
         <div class="ph-instr">${part.instruction}</div>
       </div>
@@ -756,12 +757,19 @@ function downloadPDF() {
     element.style.boxShadow = origBoxShadow;
     element.style.minHeight = origMinHeight;
     element.style.transform = origTransform;
+    origColumnPadding.forEach(({ el, padding }) => el.style.padding = padding);
   }
 
   // Temporarily apply print-friendly sizing so content is centred on target page
+  let origColumnPadding = [];
   if (layout === 'a3-dual') {
-    element.style.width = '420mm';        // 420mm full page width
+    element.style.width = '400mm';        // 420mm page − 10mm margin each side
     element.style.padding = '0';
+    // Adjust column padding to compensate for PDF margin
+    document.querySelectorAll('.qp-column-copy').forEach(el => {
+      origColumnPadding.push({ el, padding: el.style.padding });
+      el.style.padding = '18mm 10mm 10mm 10mm';
+    });
   } else {
     element.style.width = '190mm';        // 210mm page − 10mm margin each side
     element.style.padding = '15mm 10mm 15mm 10mm';
@@ -771,7 +779,7 @@ function downloadPDF() {
   element.style.transform = 'none';
 
   const opt = {
-    margin: layout === 'a3-dual' ? 0 : [10, 10, 10, 10],
+    margin: [10, 10, 10, 10],
     filename: layout === 'a3-dual' ? 'question-paper-a3.pdf' : 'question-paper.pdf',
     image: { type: 'jpeg', quality: 1.0 },
     html2canvas: { scale: layout === 'a3-dual' ? 3 : 5, useCORS: true, letterRendering: true, allowTaint: true },
@@ -852,7 +860,7 @@ document.getElementById('maxMarks').value = '20';
 // ── LAYOUT INITIALIZATION ─────────────────────────────────
 const layoutSelect = document.getElementById('layoutSelect');
 if (layoutSelect) {
-  layoutSelect.value = localStorage.getItem('qp_layout') || '1up';
+  layoutSelect.value = localStorage.getItem('qp_layout') || 'a3-dual';
   layoutSelect.addEventListener('change', () => {
     localStorage.setItem('qp_layout', layoutSelect.value);
     updatePreview();
@@ -1060,7 +1068,7 @@ window.addEventListener('resize', () => {
 
 // ── THEME TOGGLE ──────────────────────────────────────────────
 const themeToggleBtn = document.getElementById('themeToggleBtn');
-if (localStorage.getItem('theme') === 'dark') {
+if (localStorage.getItem('theme') !== 'light') {
   document.body.classList.add('dark-mode');
   if (themeToggleBtn) { themeToggleBtn.innerHTML = '<i data-lucide="sun"></i> Light Mode'; if (typeof lucide !== 'undefined') lucide.createIcons(); }
 }
