@@ -1084,3 +1084,18 @@ themeToggleBtn?.addEventListener('click', () => {
   }
   if (typeof lucide !== 'undefined') lucide.createIcons();
 });
+
+// ── BLOCK RIGHT-CLICK & INSPECT ──────────────────────────
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+document.addEventListener('keydown', e => {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key.toUpperCase())) ||
+    (e.ctrlKey && e.key.toUpperCase() === 'U') ||
+    (e.metaKey && e.altKey && ['I', 'J', 'U'].includes(e.key.toUpperCase()))
+  ) {
+    e.preventDefault();
+    return false;
+  }
+});
